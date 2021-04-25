@@ -58,7 +58,28 @@ const getUser = async (req, res) =>{
 
 }
 
-const updateUser = (req, res) =>{
+const updateUser = async (req, res) =>{
+    try {
+        const filter = { _id : req.params.id } ;
+        const updatedData = {
+            name: req.body.name ,
+            email: req.body.email,
+            password: req.body.password,
+            
+        }
+        const options = { new: true, upsert: false } ;
+
+        const result = await User.findByIdAndUpdate(filter, updatedData, options ) ;
+
+        res.status(201).json({
+            data: result ,
+            message: 'User updated successfully'
+        })
+    } catch (err) {
+        res.status(501).json({
+            errors: 'Server Side errors..!'
+        })
+    }
 
 }
 
