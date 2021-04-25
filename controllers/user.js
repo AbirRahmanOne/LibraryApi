@@ -40,7 +40,7 @@ const createUser = async (req, res) =>{
     }
 }
 
-
+// Get all user from DB
 const getUser = async (req, res) =>{
     try {
         const users = await User.find().select({
@@ -62,7 +62,24 @@ const updateUser = (req, res) =>{
 
 }
 
-const deleteUser = (req, res) =>{
+// deleting user from DB
+
+//Q. if already deleted id paased why can't get errors 
+const deleteUser = async (req, res) =>{
+    try {
+
+        const filter = { _id: req.params.id };
+        await User.deleteOne(filter) ;
+        res.status(201).json({
+            message: 'User Deleted Successfully!'
+        })
+    } catch (err) {
+        res.status(500).json({
+            error: `There was a server side errors! with ${err}`,
+        })
+        
+    }
+
 
 }
 
