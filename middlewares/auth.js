@@ -16,15 +16,26 @@ const requiredLogin = (req, res, next) => {
                           Error: 'Token does not match'
                       });
               } else {
-                  req.userData = {
-                      _id: data._id,
-                      name: data.name,
-                      email: data.email
-                  }
+                  req.admin =  data ;
                   next(); // go to next function
               }
           });
       }
   };
 
-module.exports =requiredLogin ;
+  const authorizeAdminOrlibrarian = async (req, res, next)=>{
+    if(req.admin){
+        next() ;
+        return ;
+    }else{
+        res.status(403).json({
+            Error: 'Unauthorized User'
+        });
+    }
+  }
+
+ 
+module.exports ={
+    requiredLogin,
+    authorizeAdminOrlibrarian
+}
