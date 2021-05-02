@@ -2,9 +2,9 @@ const express = require('express') ;
 const userControllers = require('../controllers/user');
 const router = express.Router() ;
 
-const requiredLogin = require('../middlewares/auth');
-
+const {requiredLogin, authorizeAdminOrlibrarian } = require('../middlewares/auth');
 //login(auth) APi
+
 router.post('/register', userControllers.signup ) ;
 router.post('/login', userControllers.login) ;
 router.post('/logout', requiredLogin , userControllers.logout) ;

@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const userRouter = require('./routes/user') ;
+const libRouter = require('./routes/book');
 
 // Assign port number forn dotenv file
 //const port = process.env.Port ;  [Why this not working..... ?]
@@ -20,8 +21,8 @@ app.use(express.json()) ;
 
 //routes
 app.use('/user', userRouter) ;
+app.use('/library', libRouter) ;
 
-console.log('here');
 
 app.get('/', (req,res)=>{
     res.send('Hello World');
