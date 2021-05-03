@@ -6,18 +6,13 @@ const libRouter = require('./routes/book');
 
 // Assign port number forn dotenv file
 //const port = process.env.Port ;  [Why this not working..... ?]
-
-
 const app = express() ;
 dotenv.config() ;
-
 // DB connection 
 connectDB() ;
 
 //body-parser
 app.use(express.json()) ;
-
-
 
 //routes
 app.use('/user', userRouter) ;
