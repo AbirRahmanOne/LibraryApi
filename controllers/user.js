@@ -1,10 +1,10 @@
 const User = require('../models/user');
+const bcrypt = require('bcrypt');
+
 const generateToken = require('../utils/generateToken');
 
 
-
 /*
-
     Test command ...
     {
         "name":"Abir Rahmn",
@@ -19,24 +19,21 @@ const generateToken = require('../utils/generateToken');
         "email":"mahfuzur@gmail.com",
         "userType": "librarian"
     }
-
 */
 
 
-// Api for post request [Creating user]
+//Creating user
 const signup = async (req, res) =>{
     try {
         const user = new User(req.body) ;
-        console.log(user); // printing the output to console .
         await user.save() ;
         res.status(201).json({
             message: 'User created Successfully.',
         }) 
         
     } catch (err) {
-
         res.status(500).json({
-            error: `Server side error ${err}`,
+            error: `Server side error`,
         })
         
     }
@@ -49,10 +46,8 @@ const login = async (req, res) =>{
         const {email, password } = req.body ;
         const user = await User.findOne( {email} ) ;
         const isValid = await user.matchPassword(password) ;
-        console.log(isValid);
-        console.log(user);
-        if(user && isValid) {
 
+        if(user && isValid) {
             res.cookie('jwt_token', generateToken[user._id], {expiresIn: '1d'}) ;
             res.status(200).json ({
                 token: generateToken(user._id),
@@ -61,16 +56,13 @@ const login = async (req, res) =>{
 
         }else{
             res.status(401).json({
-                "error": "Authetication failed!...s"
+                "error": "Authetication failed!"
             })
         }
-
-       
         
     } catch (err) {
         res.status(401).json({
-            "error": `Authetication failed! ${err}`, 
-            
+            "error": `Authetication failed!`,             
         })
     }
 }
@@ -102,20 +94,23 @@ const getUser = async (req, res) =>{
 
 }
 
-//Q: Sepecific modification options 
+//update user
 const updateUser = async (req, res) =>{
     try {
         const filter = { _id : req.params.id } ;
 
-        
-
-        const updatedData = {
-            name: req.body.name,
-            email: req.body.email
+        const updatedData = {}  
+        if(req.body.name) updatedData.name =req.body.name;
+        if(req.body.email) updatedData.email = req.body.email ;
+        if(req.body.password){
+            // hash the password before saving..
+            const salt = await bcrypt.genSalt() ;
+            updatedData.password = await bcrypt.hash(req.body.password, salt) ;
+            
         }
-       
-        const options = { new: true, upsert: false } ;
 
+           
+        const options = { new: true, upsert: false } ;
         const result = await User.findByIdAndUpdate(filter, updatedData, options ) ;
 
         res.status(201).json({
@@ -124,13 +119,12 @@ const updateUser = async (req, res) =>{
         })
     } catch (err) {
         res.status(501).json({
-            errors: `Server Side errors..!${err}`
+            errors: `Server Side errors..!`
         })
     }
-
 }
 
-// deleting user from DB  
+// delete method
 const deleteUser = async (req, res) =>{
     try {
 
@@ -154,8 +148,6 @@ const deleteUser = async (req, res) =>{
         })
         
     }
-
-
 }
 
 module.exports = {

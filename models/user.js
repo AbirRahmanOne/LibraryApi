@@ -29,7 +29,6 @@ const userSchema = new Schema({
 // check if the user entered password matches
 // with the one in the database
 userSchema.methods.matchPassword = async function(enteredPassword){
-    console.log(`Enter pass: ${enteredPassword}`);
     return await bcrypt.compare(enteredPassword, this.password) ;
 };
 
@@ -38,7 +37,6 @@ userSchema.methods.matchPassword = async function(enteredPassword){
 // hashing password value using 'bcrpyt' 
 userSchema.pre('save', async function(next){
     const salt = await bcrypt.genSalt() ;
-
     this.password = await bcrypt.hash(this.password, salt) ; //password is hashed.
     next() ;
 });

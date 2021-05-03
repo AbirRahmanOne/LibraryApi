@@ -16,14 +16,18 @@ const requiredLogin = (req, res, next) => {
                           Error: 'Token does not match'
                       });
               } else {
-                  req.admin =  data ;
+                  if(data.status === "librarian" ) {
+                    req.admin =  data ;
+                  }
                   next(); // go to next function
               }
           });
       }
   };
 
-  const authorizeAdminOrlibrarian = async (req, res, next)=>{
+  const authorizeAdminOrlibrarian =  (req, res, next)=>{
+    console.log(req.admin);
+
     if(req.admin){
         next() ;
         return ;
