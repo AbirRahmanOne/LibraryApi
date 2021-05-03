@@ -6,16 +6,17 @@ const generateToken = require('../utils/generateToken');
 
 /*
     Test command ...
+    // Data template
     {
         "name":"Abir Rahmn",
-        "password": "test1234",
-        "email":"abir.talks@gmail.com",
+        "password": "*******",
+        "email":"abir@gmail.com",
         "userType": "student"
     }
 
     {
         "name":"Mahfuzur Rahman",
-        "password": "test.1234",
+        "password": "*******",
         "email":"mahfuzur@gmail.com",
         "userType": "librarian"
     }
@@ -29,12 +30,12 @@ const signup = async (req, res) =>{
         await user.save() ;
         res.status(201).json({
             message: 'User created Successfully.',
-        }) 
+        }); 
         
     } catch (err) {
         res.status(500).json({
             error: `Server side error`,
-        })
+        });
         
     }
 }
@@ -52,28 +53,26 @@ const login = async (req, res) =>{
             res.status(200).json ({
                 token: generateToken(user._id),
                 message: "Login successful!",
-            })
+            });
 
         }else{
             res.status(401).json({
                 "error": "Authetication failed!"
-            })
+            });
         }
         
     } catch (err) {
         res.status(401).json({
             "error": `Authetication failed!`,             
-        })
+        });
     }
 }
-
+//logout method
 const logout = (req,res)=>{
-
     res.clearCookie('jwt_token');
     res.status(200).json({
         message: 'Logout Successfully..'
-    })
-
+    });
 }
 
 // Get all user from DB
@@ -94,7 +93,7 @@ const getUser = async (req, res) =>{
 
 }
 
-//update user
+//update user method
 const updateUser = async (req, res) =>{
     try {
         const filter = { _id : req.params.id } ;
@@ -108,7 +107,6 @@ const updateUser = async (req, res) =>{
             updatedData.password = await bcrypt.hash(req.body.password, salt) ;
             
         }
-
            
         const options = { new: true, upsert: false } ;
         const result = await User.findByIdAndUpdate(filter, updatedData, options ) ;
@@ -116,11 +114,11 @@ const updateUser = async (req, res) =>{
         res.status(201).json({
             data: result ,
             message: 'User updated successfully'
-        })
+        });
     } catch (err) {
         res.status(501).json({
             errors: `Server Side errors..!`
-        })
+        });
     }
 }
 
@@ -135,17 +133,17 @@ const deleteUser = async (req, res) =>{
         if(result){
             res.status(201).json({
                 message: 'User Deleted Successfully!'
-            })
+            });
         }else{
             res.status(501).json({
                 message: 'Already Deleted!'
-            })
+            });
         }
         
     } catch (err) {
         res.status(500).json({
-            error: `There was a server side errors! with ${err}`,
-        })
+            error: `There was a server side errors!`,
+        });
         
     }
 }
