@@ -48,10 +48,16 @@ const login = async (req, res) =>{
         const user = await User.findOne( {email} ) ;
         const isValid = await user.matchPassword(password) ;
 
+        const payload = {
+            id: user._id,
+            email: user.email,
+            userType: user.userType
+        }
+        
         if(user && isValid) {
-            res.cookie('jwt_token', generateToken[user._id], {expiresIn: '1d'}) ;
+            res.cookie('jwt_token', generateToken(payload), {expiresIn: '1d'}) ;
             res.status(200).json ({
-                token: generateToken(user._id),
+                token: generateToken(payload),
                 message: "Login successful!",
             });
 
