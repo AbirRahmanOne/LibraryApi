@@ -10,7 +10,7 @@ router.post('/logout',authenticate,userControllers.logout) ;
 
 
 // User info api 
-router.get('/all',authenticate ,authorizeAdminOrlibrarian, userControllers.getUser ) ;
+router.get('/all', userControllers.getUser ) ;
 router.put('/:id',authenticate,authorizeAdminOrlibrarian, userControllers.updateUser ) ;
 router.delete('/:id',authenticate,authorizeAdminOrlibrarian, userControllers.deleteUser) ;
 
