@@ -11,6 +11,12 @@ dotenv.config() ;
 // DB connection 
 connectDB() ;
 
+let port = process.env.PORT ;
+
+if( port ==null || port == ''){
+    port = 8000 ;
+}
+
 //body-parser
 app.use(express.json()) ;
 
@@ -20,9 +26,9 @@ app.use('/library', libRouter) ;
 
 
 app.get('/', (req,res)=>{
-    res.send('Hello World');
+    res.send('Library Management System');
 })
 
-app.listen( process.env.Port , ()=>{
-    console.log(`LMS app Listening at http://localhost:${process.env.Port}`);
+app.listen( port , ()=>{
+    console.log(`LMS app Listening at http://localhost:${port}`);
 })
